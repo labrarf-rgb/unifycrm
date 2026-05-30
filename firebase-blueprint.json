@@ -1,0 +1,77 @@
+{
+  "entities": {
+    "Constituent": {
+      "title": "Constituent",
+      "description": "Unified profile for donors and volunteers",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "phone": { "type": "string" },
+        "status": { "type": "string", "enum": ["active", "inactive"] },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "createdAt": { "type": "number" },
+        "updatedAt": { "type": "number" }
+      },
+      "required": ["name", "email"]
+    },
+    "Donation": {
+      "title": "Donation",
+      "description": "Financial contribution record",
+      "type": "object",
+      "properties": {
+        "constituentId": { "type": "string" },
+        "amount": { "type": "number" },
+        "method": { "type": "string", "enum": ["cash", "check", "e-transfer", "stripe", "paypal"] },
+        "timestamp": { "type": "number" },
+        "note": { "type": "string" }
+      },
+      "required": ["constituentId", "amount", "method"]
+    },
+    "VolunteerLog": {
+      "title": "VolunteerLog",
+      "description": "Volunteer hours tracking",
+      "type": "object",
+      "properties": {
+        "constituentId": { "type": "string" },
+        "checkIn": { "type": "number" },
+        "checkOut": { "type": "number" },
+        "hours": { "type": "number" },
+        "note": { "type": "string" },
+        "status": { "type": "string", "enum": ["active", "completed"] }
+      },
+      "required": ["constituentId", "checkIn"]
+    },
+    "Staff": {
+      "title": "Staff",
+      "description": "System users and administrators",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "role": { "type": "string", "enum": ["admin", "coordinator"] },
+        "status": { "type": "string", "enum": ["active", "inactive"] },
+        "createdAt": { "type": "number" }
+      },
+      "required": ["name", "email", "role"]
+    }
+  },
+  "firestore": {
+    "constituents": {
+      "schema": "Constituent",
+      "description": "Primary contact list"
+    },
+    "donations": {
+      "schema": "Donation",
+      "description": "Financial history"
+    },
+    "volunteerLogs": {
+      "schema": "VolunteerLog",
+      "description": "Service history"
+    },
+    "staff": {
+      "schema": "Staff",
+      "description": "Authorized staff users"
+    }
+  }
+}

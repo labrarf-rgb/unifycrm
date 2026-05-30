@@ -1,0 +1,8 @@
+{
+  "name": "UnifyCRM",
+  "description": "Unified Donor & Volunteer CRM for grassroots organizations, featuring shared profiles, donation tracking, and an attendance kiosk.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
