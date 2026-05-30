@@ -17,6 +17,7 @@ import Kiosk from './pages/Kiosk';
 import StaffManagement from './pages/StaffManagement';
 import Login from './pages/Login';
 import Reports from './pages/Reports';
+import Constituents from './pages/Constituents';
 import AdminLockModal from './components/AdminLockModal';
 
 function Sidebar({ user }: { user: Staff | null }) {
@@ -30,6 +31,7 @@ function Sidebar({ user }: { user: Staff | null }) {
 
   const links = [
     { to: '/', icon: LayoutDashboard, label: 'Dashboard' },
+    { to: '/constituents', icon: Users, label: 'Constituents' },
     { to: '/reports', icon: BarChart3, label: 'Reporting' },
     { to: '/kiosk', icon: Clock, label: 'Kiosk Mode', isAdminOnly: true },
   ];
@@ -117,6 +119,7 @@ function MobileNav({ user }: { user: Staff | null }) {
     <>
       <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-[#5A5A40]/10 px-6 py-3 flex items-center justify-around md:hidden z-50">
         <Link to="/" className="p-2 text-[#5A5A40]"><LayoutDashboard className="w-6 h-6" /></Link>
+        <Link to="/constituents" className="p-2 text-[#5A5A40]/40"><Users className="w-6 h-6" /></Link>
         <Link to="/reports" className="p-2 text-[#5A5A40]/40"><BarChart3 className="w-6 h-6" /></Link>
         <button onClick={() => setShowKioskLock(true)} className="p-2 text-[#5A5A40]/40"><Clock className="w-6 h-6" /></button>
         <Link to="/settings" className="p-2 text-[#5A5A40]/40"><Users className="w-6 h-6" /></Link>
@@ -171,6 +174,10 @@ export default function App() {
             <Route 
               path="/constituent/:id" 
               element={user ? <ConstituentProfile /> : <Navigate to="/login" replace />} 
+            />
+            <Route 
+              path="/constituents" 
+              element={user ? <Constituents /> : <Navigate to="/login" replace />} 
             />
             <Route 
               path="/settings" 

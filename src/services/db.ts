@@ -2,9 +2,9 @@ import { Constituent, Donation, VolunteerLog, Staff, Report } from '../types';
 
 // Mock data for initial state or when Firebase is not connected
 let mock_constituents: Constituent[] = [
-  { id: '1', name: 'John Doe', email: 'john@example.com', status: 'active', tags: ['Donor', 'Volunteer'], createdAt: Date.now() - 100000000, updatedAt: Date.now() },
-  { id: '2', name: 'Jane Smith', email: 'jane@example.com', status: 'active', tags: ['Donor'], createdAt: Date.now() - 200000000, updatedAt: Date.now() },
-  { id: '3', name: 'Bob Wilson', email: 'bob@example.com', status: 'inactive', tags: ['Board Member'], createdAt: Date.now() - 300000000, updatedAt: Date.now() }
+  { id: '1', name: 'John Doe', email: 'john@example.com', status: 'active', isBoardMember: false, tags: ['Donor', 'Volunteer'], createdAt: Date.now() - 100000000, updatedAt: Date.now() },
+  { id: '2', name: 'Jane Smith', email: 'jane@example.com', status: 'active', isBoardMember: false, tags: ['Donor'], createdAt: Date.now() - 200000000, updatedAt: Date.now() },
+  { id: '3', name: 'Bob Wilson', email: 'bob@example.com', status: 'inactive', isBoardMember: true, tags: ['Board Member'], createdAt: Date.now() - 300000000, updatedAt: Date.now() }
 ];
 
 let mock_donations: Donation[] = [
@@ -45,6 +45,7 @@ const seedMockData = () => {
       name: `${fn} ${sn}`,
       email: `${fn.toLowerCase()}.${sn.toLowerCase()}${i}@example.org`,
       status: Math.random() > 0.1 ? 'active' : 'inactive',
+      isBoardMember: false,
       tags: Math.random() > 0.5 ? ['Donor'] : Math.random() > 0.5 ? ['Volunteer'] : ['Donor', 'Volunteer'],
       createdAt,
       updatedAt: createdAt + (Math.random() * (Date.now() - createdAt))
@@ -96,6 +97,22 @@ const seedMockData = () => {
 };
 
 seedMockData();
+
+export async function getConstituentTags(constituentId: string, createdAt: number): Promise<string[]> {
+  const tags: string[] = [];
+  
+  if (mock_donations.some(d => d.constituentId === constituentId)) {
+    tags.push('Donor');
+  }
+  if (mock_logs.some(l => l.constituentId === constituentId)) {
+    tags.push('Volunteer');
+  }
+  if (Date.now() - createdAt <= 30 * 24 * 60 * 60 * 1000) {
+    tags.push('New');
+  }
+  
+  return tags;
+}
 
 export const staffService = {
   async getAll(): Promise<Staff[]> {

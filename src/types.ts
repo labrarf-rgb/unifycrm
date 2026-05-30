@@ -4,6 +4,7 @@ export interface Constituent {
   email: string;
   phone?: string;
   status: 'active' | 'inactive';
+  isBoardMember?: boolean;
   tags: string[];
   createdAt: number;
   updatedAt: number;

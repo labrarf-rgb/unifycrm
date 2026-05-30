@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Search, UserPlus, Clock, Heart, BarChart3, Mail } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Constituent } from '../types';
-import { constituentService, settingsService, donationService, volunteerService } from '../services/db';
+import { constituentService, settingsService, donationService, volunteerService, getConstituentTags } from '../services/db';
 
 export default function Dashboard() {
   const [searchTerm, setSearchTerm] = useState('');
   const [results, setResults] = useState<Constituent[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [currency, setCurrency] = useState('USD');
+  const [tagMap, setTagMap] = useState<Record<string, string[]>>({});
   const [stats, setStats] = useState({
     totalDonated: 0,
     activeVolunteers: 0,
@@ -47,12 +48,22 @@ export default function Dashboard() {
     const handleSearch = async () => {
       if (searchTerm.length < 2) {
         setResults([]);
+        setTagMap({});
         return;
       }
       setIsSearching(true);
       try {
         const data = await constituentService.search(searchTerm);
         setResults(data);
+
+        const newTagMap: Record<string, string[]> = {};
+        for (const person of data) {
+          const tags = await getConstituentTags(person.id, person.createdAt);
+          if (person.isBoardMember) tags.push('Board Member');
+          tags.push(person.status === 'active' ? 'Active' : 'Inactive');
+          newTagMap[person.id] = tags;
+        }
+        setTagMap(newTagMap);
       } catch (e) {
         console.error(e);
       } finally {
@@ -129,7 +140,7 @@ export default function Dashboard() {
                     <span className="text-[10px] text-[#5A5A40]/60 font-bold uppercase tracking-widest">{person.email}</span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    {person.tags.map(tag => (
+                    {(tagMap[person.id] || []).map(tag => (
                       <span key={tag} className="px-3 py-1 bg-[#e8e8df] text-[#5A5A40] text-[9px] font-bold uppercase tracking-widest rounded-full">
                         {tag}
                       </span>
