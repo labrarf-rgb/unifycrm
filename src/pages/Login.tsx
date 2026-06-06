@@ -101,6 +101,11 @@ export default function Login() {
           </button>
         </form>
 
+        <div className="bg-[#e8e8df] text-[#5A5A40] rounded-2xl p-4 text-center text-xs font-bold">
+          <p className="uppercase tracking-widest text-[10px] text-[#5A5A40]/60 mb-1">Demo Access</p>
+          <p>This is a demo instance. Use <span className="font-bold">Admin</span> / <span className="font-bold">Admin</span> to sign in.</p>
+        </div>
+
         <div className="text-center">
           <p className="text-[10px] text-[#5A5A40]/40 font-bold uppercase tracking-widest">Enterprise Access Protocol v4.0</p>
         </div>
